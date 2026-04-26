@@ -209,7 +209,7 @@ const S = {
       },
       correct: { background: "#22c55e", color: "#fff" },
       wrong: { background: "#ef4444", color: "#fff" },
-      reveal: { background: "#f59e0b", color: "#fff" },
+      reveal: { background: "#7c3aed", color: "#fff" },
     };
     return { ...base, ...variants[variant] };
   },
@@ -310,6 +310,7 @@ function QuestionModal({ col, row, onClose }) {
 
   const [inputVal, setInputVal] = useState("");
   const [hint, setHint] = useState(false);
+  const [showAnswer, setShowAnswer] = useState(false);
   const [phase, setPhase] = useState("entry"); // entry | judge | done
   const [autoCorrect, setAutoCorrect] = useState(null);
   const [judgeResult, setJudgeResult] = useState(null);
@@ -356,8 +357,41 @@ function QuestionModal({ col, row, onClose }) {
             <div style={S.btnRow}>
               <Button variant="gold" onClick={handleSubmit}>Submit</Button>
               <Button variant="outline" onClick={() => setHint(true)}>Hint</Button>
+              <Button variant="reveal" onClick={() => setShowAnswer(true)}>Show Answer</Button>
               <Button variant="outline" onClick={() => onClose(null)}>Skip</Button>
             </div>
+            {showAnswer && (
+              <div style={{
+                marginTop: "0.9rem",
+                background: "rgba(245,200,66,0.08)",
+                border: "1px solid rgba(245,200,66,0.4)",
+                borderRadius: "10px",
+                padding: "12px 14px",
+                textAlign: "left",
+              }}>
+                <div style={{ fontSize: "11px", color: "#f5c842", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "6px" }}>
+                  ✦ Answer &amp; Worked Solution
+                </div>
+                <div style={{ fontSize: "14px", fontWeight: 700, color: "#f5c842", marginBottom: "8px" }}>
+                  {qData.a}
+                </div>
+                <pre style={{
+                  fontSize: "12px",
+                  color: "rgba(255,255,255,0.75)",
+                  whiteSpace: "pre-wrap",
+                  lineHeight: 1.7,
+                  margin: 0,
+                  fontFamily: "'DM Sans', sans-serif",
+                }}>
+                  {qData.solution}
+                </pre>
+                <div style={{ marginTop: "10px" }}>
+                  <Button variant="wrong" onClick={() => { onClose(0); }}>
+                    ✗ I needed the answer — no points
+                  </Button>
+                </div>
+              </div>
+            )}
           </>
         )}
 
